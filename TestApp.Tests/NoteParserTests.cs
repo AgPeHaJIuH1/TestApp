@@ -17,7 +17,7 @@ namespace TestApp.Tests
         {
             NoteParser parser = new NoteParser();
 
-            List<NoteGroup> list = parser.Parse(2, 4, 4, 4, 8, 8, 8, 8).ToList();
+            List<ParseNoteResult> list = parser.Parse(2, 4, 4, 4, 8, 8, 8, 8).ToList();
 
             Assert.AreEqual(2, list.Count);
         }
@@ -27,7 +27,7 @@ namespace TestApp.Tests
         {
             NoteParser parser = new NoteParser();
 
-            List<NoteGroup> list = parser.Parse(2, 4, 4, 4, 8, 8, 4, 8, 4, 8).ToList();
+            List<ParseNoteResult> list = parser.Parse(2, 4, 4, 4, 8, 8, 4, 8, 4, 8).ToList();
 
             Assert.AreEqual(3, list.Count);
         }
@@ -39,7 +39,7 @@ namespace TestApp.Tests
 
             Exception exception = Assert.Throws<Exception>(() => parser.Parse(2, 4, 4, 4, 8, 8).ToList());
 
-            Assert.That(exception.Message == "Размер ноты слишком маленький");
+            Assert.That(exception.Message == NoteParser.NOTE_SMALL_SIZE_ERROR);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace TestApp.Tests
 
             Exception exception = Assert.Throws<Exception>(() => parser.Parse(2, 4, 4, 4, 8, 8, 8, 4).ToList());
 
-            Assert.That(exception.Message == "Размер ноты слишком большой");
+            Assert.That(exception.Message == NoteParser.NOTE_BIG_SIZE_ERROR);
         }
     }
 }

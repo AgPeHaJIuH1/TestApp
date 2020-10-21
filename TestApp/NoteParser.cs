@@ -6,6 +6,9 @@ namespace TestApp
 {
     public class NoteParser
     {
+        internal const string NOTE_BIG_SIZE_ERROR = "Размер ноты слишком большой";
+        internal const string NOTE_SMALL_SIZE_ERROR = "Размер ноты слишком маленький";
+
 
         public NoteParser()
         {
@@ -13,7 +16,7 @@ namespace TestApp
         }
 
 
-        public IEnumerable<NoteGroup> Parse(int noteCount, int size, params int[] noteArr)
+        public IEnumerable<ParseNoteResult> Parse(int noteCount, int size, params int[] noteArr)
         {
             decimal targetValue = noteCount / (decimal)size;
             List<Note> list = noteArr.Select(q => new Note(q)).ToList();
@@ -27,18 +30,23 @@ namespace TestApp
 
                 if (targetValue == currentValue)
                 {
-                    yield return group;
+                    yield return new ParseNoteResult(group);
                     group = new NoteGroup();
                     currentValue = 0;
                     continue;
                 }
 
                 if (targetValue < currentValue)
-                    throw new Exception("Размер ноты слишком большой");
+                {
+                    yield return new ParseNoteResult(NOTE_BIG_SIZE_ERROR);
+                    group = new NoteGroup();
+                    currentValue = 0;
+                    continue;
+                }
             }
 
             if (currentValue != 0)
-                throw new Exception("Размер ноты слишком маленький");
+                yield return new ParseNoteResult(NOTE_SMALL_SIZE_ERROR);
         }
     }
 }
