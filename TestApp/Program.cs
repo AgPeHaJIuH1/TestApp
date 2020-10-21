@@ -11,6 +11,7 @@ namespace TestApp
 
             while (true)
             {
+                bool isFirst = true;
                 try
                 {
                     Console.Write("Введите размер: ");
@@ -33,7 +34,6 @@ namespace TestApp
 
                     int[] noteArr = notesStr.Trim().Split(" ").Select(int.Parse).ToArray();
 
-                    bool isFirst = true;
                     foreach (NoteGroup group in parser.Parse(sizeArr[0], sizeArr[1], noteArr))
                     {
                         if (!isFirst)
@@ -48,8 +48,10 @@ namespace TestApp
                 }
                 catch (Exception ex)
                 {
-                    Console.Write(" | ");
-                    Console.Write(ex.Message);
+                    if (!isFirst)
+                        Console.Write(" | ");
+                    Console.Write("<Ошибка>");
+                    //Console.Write(ex.Message);
                 }
 
                 Console.WriteLine();
